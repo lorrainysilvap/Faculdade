@@ -1,0 +1,133 @@
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class Funcionario {
+    private String nome;
+    private String cpf;
+    private double salario;
+
+    public Funcionario(String nome, String cpf, double salario) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.salario = salario;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
+    public abstract void exibirDetalhes();
+}
+
+class Gerente extends Funcionario {
+    private double bonus;
+
+    public Gerente(String nome, String cpf, double salario, double bonus) {
+        super(nome, cpf, salario);
+        this.bonus = bonus;
+    }
+
+    public double getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
+    }
+
+ 
+    public void exibirDetalhes() {
+        System.out.println("Gerente:");
+        System.out.println("Nome: " + getNome());
+        System.out.println("CPF: " + getCpf());
+        System.out.println("Salário: " + getSalario());
+        System.out.println("Bônus: " + bonus);
+    }
+}
+
+class Desenvolvedor extends Funcionario {
+    private String linguagemPrincipal;
+
+    public Desenvolvedor(String nome, String cpf, double salario, String linguagemPrincipal) {
+        super(nome, cpf, salario);
+        this.linguagemPrincipal = linguagemPrincipal;
+    }
+
+    public String getLinguagemPrincipal() {
+        return linguagemPrincipal;
+    }
+
+    public void setLinguagemPrincipal(String linguagemPrincipal) {
+        this.linguagemPrincipal = linguagemPrincipal;
+    }
+
+
+    public void exibirDetalhes() {
+        System.out.println("Desenvolvedor:");
+        System.out.println("Nome: " + getNome());
+        System.out.println("CPF: " + getCpf());
+        System.out.println("Salário: " + getSalario());
+        System.out.println("Linguagem Principal: " + linguagemPrincipal);
+    }
+}
+
+class Estagiario extends Funcionario {
+    private String supervisor;
+
+    public Estagiario(String nome, String cpf, double salario, String supervisor) {
+        super(nome, cpf, salario);
+        this.supervisor = supervisor;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
+    }
+
+   
+    public void exibirDetalhes() {
+        System.out.println("Estagiário:");
+        System.out.println("Nome: " + getNome());
+        System.out.println("CPF: " + getCpf());
+        System.out.println("Salário: " + getSalario());
+        System.out.println("Supervisor: " + supervisor);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Funcionario> funcionarios = new ArrayList<>();
+
+        funcionarios.add(new Gerente("João", "123.456.789-00", 5000.00, 1000.00));
+        funcionarios.add(new Desenvolvedor("Maria", "987.654.321-00", 4000.00, "Java"));
+        funcionarios.add(new Estagiario("Pedro", "111.222.333-44", 1500.00, "Ana"));
+
+        for (Funcionario funcionario : funcionarios) {
+            funcionario.exibirDetalhes();
+            System.out.println(); 
+        }
+    }
+}
