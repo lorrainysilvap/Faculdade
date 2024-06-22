@@ -1,0 +1,334 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Pessoa {
+    protected String nome;
+    protected int idade;
+    protected String cpf;
+
+    public Pessoa(String nome, int idade, String cpf) {
+        this.nome = nome;
+        this.idade = idade;
+        this.cpf = cpf;
+    }
+
+    public void exibirDados() {
+        System.out.println("Nome: " + nome);
+        System.out.println("Idade: " + idade);
+        System.out.println("CPF: " + cpf);
+    }
+}
+
+class Aluno extends Pessoa {
+    private String matricula;
+    private List<String> cursos = new ArrayList<>();
+
+    public Aluno(String nome, int idade, String cpf) {
+        super(nome, idade, cpf);
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public void realizarMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public void exibirDados() {
+        super.exibirDados();
+        System.out.println("Matrícula: " + matricula);
+        if (!cursos.isEmpty()) {
+            System.out.println("Cursos Matriculados:");
+            for (String curso : cursos) {
+                System.out.println("- " + curso);
+            }
+        }
+    }
+
+    public void adicionarCurso(String curso) throws LimiteCursosAlcancadoException {
+        if (cursos.size() >= 5) {
+            throw new LimiteCursosAlcancadoException("Não é possível se matricular em mais de 5 cursos.");
+        }
+        cursos.add(curso);
+    }
+
+    public List<String> getCursos() {
+        return cursos;
+    }
+}
+
+class Professor extends Pessoa {
+    private double salario;
+    private String disciplina;
+    private int quantidadeAulaDada;
+
+    public Professor(String nome, int idade, String cpf, double salario, String disciplina) {
+        super(nome, idade, cpf);
+        this.salario = salario;
+        this.disciplina = disciplina;
+        this.quantidadeAulaDada = 0;
+    }
+
+    public void darAula(int quantidade) {
+        this.quantidadeAulaDada += quantidade;
+    }
+
+    public void exibirDados() {
+        super.exibirDados();
+        System.out.println("Salário: " + salario);
+        System.out.println("Disciplina: " + disciplina);
+        System.out.println("Quantidade de Aulas Dadas: " + quantidadeAulaDada);
+    }
+
+    public int getQuantidadeAulaDada() {
+        return quantidadeAulaDada;
+    }
+}
+
+class Funcionario extends Pessoa {
+    private String cargo;
+    private String setor;
+    private String tarefaExecutada;
+
+    public Funcionario(String nome, int idade, String cpf, String cargo, String setor) {
+        super(nome, idade, cpf);
+        this.cargo = cargo;
+        this.setor = setor;
+    }
+
+    public void executarTarefa(String tarefa) {
+        this.tarefaExecutada = tarefa;
+    }
+
+    public void exibirDados() {
+        super.exibirDados();
+        System.out.println("Cargo: " + cargo);
+        System.out.println("Setor: " + setor);
+        System.out.println("Tarefa Executada: " + tarefaExecutada);
+    }
+
+    public String getTarefaExecutada() {
+        return tarefaExecutada;
+    }
+}
+
+class Curso {
+    private String nome;
+    private String codigo;
+    private Professor professorResponsavel;
+    private List<Aluno> alunos = new ArrayList<>();
+
+    public Curso(String nome, String codigo, Professor professorResponsavel) {
+        this.nome = nome;
+        this.codigo = codigo;
+        this.professorResponsavel = professorResponsavel;
+    }
+
+    public void adicionarAluno(Aluno aluno) {
+        alunos.add(aluno);
+    }
+
+    public void removerAluno(Aluno aluno) {
+        alunos.remove(aluno);
+    }
+
+    public void listarAlunos() {
+        for (Aluno aluno : alunos) {
+            aluno.exibirDados();
+        }
+    }
+}
+
+class LimiteCursosAlcancadoException extends Exception {
+    public LimiteCursosAlcancadoException(String mensagem) {
+        super(mensagem);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Aluno> alunos = new ArrayList<>();
+        List<Professor> professores = new ArrayList<>();
+        List<Funcionario> funcionarios = new ArrayList<>();
+        List<Curso> cursos = new ArrayList<>();
+
+        int opcao;
+        do {
+            System.out.println("\nEscolha uma opção:");
+            System.out.println("1. Cadastrar Aluno");
+            System.out.println("2. Cadastrar Professor");
+            System.out.println("3. Cadastrar Funcionário");
+            System.out.println("4. Registrar Aulas Dadas por Professor");
+            System.out.println("5. Mostrar Lista de Alunos, Professores e Funcionários");
+            System.out.println("6. Sair");
+
+            opcao = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (opcao) {
+                case 1:
+                    cadastrarAluno(scanner, alunos);
+                    break;
+                case 2:
+                    cadastrarProfessor(scanner, professores);
+                    break;
+                case 3:
+                    cadastrarFuncionario(scanner, funcionarios);
+                    break;
+                case 4:
+                    registrarAulasDadas(scanner, professores);
+                    break;
+                case 5:
+                    mostrarListas(alunos, professores, funcionarios);
+                    break;
+                case 6:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Escolha novamente.");
+            }
+        } while (opcao != 6);
+
+        scanner.close();
+    }
+
+    private static void cadastrarAluno(Scanner scanner, List<Aluno> alunos) {
+        System.out.println("\nCadastro de Aluno:");
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("Idade: ");
+        int idade = Integer.parseInt(scanner.nextLine());
+        System.out.print("CPF: ");
+        String cpf = scanner.nextLine();
+        System.out.print("Matrícula: ");
+        String matricula = scanner.nextLine();
+        Aluno aluno = new Aluno(nome, idade, cpf);
+        aluno.setMatricula(matricula);
+
+        boolean adicionarMaisCursos = true;
+        while (adicionarMaisCursos) {
+            System.out.print("Deseja adicionar um curso? (S/N): ");
+            String resposta = scanner.nextLine().toUpperCase();
+
+            if (resposta.equals("S")) {
+                System.out.print("Nome do curso: ");
+                String curso = scanner.nextLine();
+                try {
+                    aluno.adicionarCurso(curso);
+                    System.out.println("Curso adicionado com sucesso!");
+                } catch (LimiteCursosAlcancadoException e) {
+                    System.out.println(e.getMessage());
+                    break; 
+                }
+            } else if (resposta.equals("N")) {
+                adicionarMaisCursos = false;
+            } else {
+                System.out.println("Opção inválida. Digite S para sim ou N para não.");
+            }
+        }
+
+        alunos.add(aluno);
+        System.out.println("Aluno cadastrado com sucesso!");
+    }
+
+    private static void cadastrarProfessor(Scanner scanner, List<Professor> professores) {
+        System.out.println("\nCadastro de Professor:");
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("Idade: ");
+        int idade = Integer.parseInt(scanner.nextLine());
+        System.out.print("CPF: ");
+        String cpf = scanner.nextLine();
+        System.out.print("Salário: ");
+        double salario = Double.parseDouble(scanner.nextLine());
+        System.out.print("Disciplina: ");
+        String disciplina = scanner.nextLine();
+        Professor professor = new Professor(nome, idade, cpf, salario, disciplina);
+        professores.add(professor);
+        System.out.println("Professor cadastrado com sucesso!");
+    }
+
+    private static void cadastrarFuncionario(Scanner scanner, List<Funcionario> funcionarios) {
+        System.out.println("\nCadastro de Funcionário:");
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("Idade: ");
+        int idade = Integer.parseInt(scanner.nextLine());
+        System.out.print("CPF: ");
+        String cpf = scanner.nextLine();
+        System.out.print("Cargo: ");
+        String cargo = scanner.nextLine();
+        System.out.print("Setor: ");
+        String setor = scanner.nextLine();
+        System.out.print("Tarefa Executada: ");
+        String tarefaExecutada = scanner.nextLine();
+        Funcionario funcionario = new Funcionario(nome, idade, cpf, cargo, setor);
+        funcionario.executarTarefa(tarefaExecutada);
+        funcionarios.add(funcionario);
+        System.out.println("Funcionário cadastrado com sucesso!");
+    }
+
+    private static void registrarAulasDadas(Scanner scanner, List<Professor> professores) {
+        System.out.println("\nRegistro de Aulas Dadas por Professor:");
+        if (professores.isEmpty()) {
+            System.out.println("Nenhum professor cadastrado.");
+            return;
+        }
+
+        System.out.println("Professores disponíveis:");
+        for (int i = 0; i < professores.size(); i++) {
+            System.out.println((i + 1) + ". " + professores.get(i).nome);
+        }
+
+        System.out.print("Escolha o professor pelo número: ");
+        int escolha = scanner.nextInt();
+        scanner.nextLine(); 
+
+        if (escolha >= 1 && escolha <= professores.size()) {
+            System.out.print("Quantidade de aulas dadas: ");
+            int quantidade = scanner.nextInt();
+            scanner.nextLine(); 
+
+            Professor professor = professores.get(escolha - 1);
+            professor.darAula(quantidade);
+            System.out.println("Aulas registradas com sucesso para o professor " + professor.nome + ".");
+        } else {
+            System.out.println("Opção inválida.");
+        }
+    }
+
+    private static void mostrarListas(List<Aluno> alunos, List<Professor> professores, List<Funcionario> funcionarios) {
+        System.out.println("\nLista de Alunos:");
+        if (alunos.isEmpty()) {
+            System.out.println("Nenhum aluno cadastrado.");
+        } else {
+            for (Aluno aluno : alunos) {
+                aluno.exibirDados();
+                System.out.println(); 
+            }
+        }
+
+        System.out.println("\nLista de Professores:");
+        if (professores.isEmpty()) {
+            System.out.println("Nenhum professor cadastrado.");
+        } else {
+            for (Professor professor : professores) {
+                professor.exibirDados();
+                System.out.println(); 
+            }
+        }
+
+        System.out.println("\nLista de Funcionários:");
+        if (funcionarios.isEmpty()) {
+            System.out.println("Nenhum funcionário cadastrado.");
+        } else {
+            for (Funcionario funcionario : funcionarios) {
+                funcionario.exibirDados();
+                System.out.println(); 
+            }
+        }
+    }
+}
