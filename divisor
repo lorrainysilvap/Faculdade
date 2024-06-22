@@ -1,0 +1,38 @@
+import java.util.Scanner;
+
+class DivisaoCalculator {
+
+  
+    public int dividir(int a, int b) throws ArithmeticException {
+        if (b == 0) {
+            throw new ArithmeticException("Divisão por zero não é permitida.");
+        }
+        return a / b;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DivisaoCalculator calculator = new DivisaoCalculator();
+
+        try {
+            System.out.print("Insira o primeiro número inteiro: ");
+            int num1 = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Insira o segundo número inteiro: ");
+            int num2 = Integer.parseInt(scanner.nextLine());
+
+            int resultado = calculator.dividir(num1, num2);
+
+            System.out.println("Resultado da divisão: " + resultado);
+        } catch (ArithmeticException e) {
+            System.err.println("Erro: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Erro: Entrada inválida. Por favor, insira números inteiros.");
+        } catch (Exception e) {
+           
+            System.err.println("Ocorreu um erro inesperado: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+}
